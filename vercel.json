@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/chord-inator",
+      "destination": "/piano-xl.html"
+    },
+    {
+      "source": "/auth",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/subscription",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/success",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/piano-xl.html",
+      "destination": "/chord-inator",
+      "permanent": true
+    },
+    {
+      "source": "/piano-xl",
+      "destination": "/chord-inator",
+      "permanent": true
+    }
+  ]
+}
