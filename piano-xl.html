@@ -202,29 +202,6 @@
             white-space: normal;
         }
 
-        /* Sign out button styling - positioned below MIDI indicator */
-        .sign-out-btn {
-            position: absolute;
-            top: 48px;
-            right: 24px;
-            cursor: pointer;
-            user-select: none;
-            z-index: 9999;
-        }
-
-        .sign-out-btn span {
-            font-size: 10px;
-            color: #aaa;
-            text-align: center;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: color 0.2s ease;
-        }
-
-        .sign-out-btn:hover span {
-            color: #fff;
-        }
 
         /* All mode headers now positioned at same height */
         .mode-header[data-system="harmonicMinor"],
@@ -857,16 +834,17 @@
             color: white;
         }
 
-        /* MIDI Indicator */
+        /* MIDI Indicator - positioned relative to piano-xl-container */
         .midi-indicator {
             position: absolute;
-            top: 24px;
-            right: 24px;
+            top: -15px; /* Lowered by 25px from -40px */
+            right: 0px;
             display: flex;
             align-items: center;
             gap: 8px;
             color: white;
             font-size: 14px;
+            z-index: 1000;
         }
 
         .midi-dot {
@@ -1589,15 +1567,7 @@
 
     <!-- Eye button removed -->
 
-    <!-- MIDI and slot indicators -->
-    <div class="midi-indicator">
-        <div class="midi-dot" id="midi-dot"></div>
-        <span>MIDI <span id="midi-status">OFF</span></span>
-    </div>
-    
-    <div class="sign-out-btn" id="sign-out-btn">
-        <span>SIGN OUT</span>
-    </div>
+    <!-- MIDI indicator moved inside piano-xl-container for locked positioning -->
 
 
 
@@ -1609,6 +1579,12 @@
 
 
         <div class="piano-xl-container">
+            <!-- MIDI indicator positioned relative to piano container -->
+            <div class="midi-indicator">
+                <div class="midi-dot" id="midi-dot"></div>
+                <span>MIDI <span id="midi-status">OFF</span></span>
+            </div>
+            
             <!-- Controls Row -->
             <div class="controls-row">
                 <!-- Bass Button -->
@@ -8039,57 +8015,6 @@ ${JSON.stringify(state.savedPalettes, null, 2)}
             } catch (error) {
                 console.error('❌ Error during app initialization:', error);
             }
-            
-            // Add sign-out button event listener after DOM is ready
-            setTimeout(() => {
-                const signOutBtn = document.getElementById('sign-out-btn');
-                console.log('🚪 Sign out button element:', signOutBtn);
-                console.log('🚪 Sign out button style:', signOutBtn ? getComputedStyle(signOutBtn) : 'null');
-                console.log('🚪 Sign out button rect:', signOutBtn ? signOutBtn.getBoundingClientRect() : 'null');
-                
-                if (signOutBtn) {
-                    // Try multiple event approaches
-                    const clickHandler = async (e) => {
-                        console.log('🚪 SIGN OUT CLICKED! Event:', e);
-                        console.log('🚪 Event target:', e.target);
-                        console.log('🚪 Event currentTarget:', e.currentTarget);
-                        e.preventDefault();
-                        e.stopPropagation();
-                        try {
-                            console.log('🚪 Attempting sign out...');
-                            // Force sign out with scope 'global' to clear all sessions
-                            await supabase.auth.signOut({ scope: 'global' });
-                            console.log('🚪 Sign out successful, clearing storage and redirecting...');
-                            // Clear all local storage and session storage
-                            localStorage.clear();
-                            sessionStorage.clear();
-                            // Force a complete page reload to the auth page (Welcome Back page)
-                            window.location.replace('/auth');
-                        } catch (error) {
-                            console.error('🚪 Sign out error:', error);
-                        }
-                    };
-                    
-                    // Add event listeners to both the button and its span
-                    signOutBtn.addEventListener('click', clickHandler);
-                    signOutBtn.addEventListener('mousedown', (e) => console.log('🚪 Mousedown on sign-out button'));
-                    signOutBtn.addEventListener('mouseup', (e) => console.log('🚪 Mouseup on sign-out button'));
-                    
-                    const span = signOutBtn.querySelector('span');
-                    if (span) {
-                        span.addEventListener('click', clickHandler);
-                        console.log('🚪 Added click handler to span as well');
-                    }
-                    
-                    // Test if element is clickable
-                    signOutBtn.addEventListener('mouseover', () => console.log('🚪 Mouse over sign-out button'));
-                    signOutBtn.addEventListener('mouseout', () => console.log('🚪 Mouse out sign-out button'));
-                    
-                    console.log('✅ Sign out event listeners added');
-                } else {
-                    console.error('❌ Sign out button not found!');
-                }
-            }, 500); // Increased timeout
             
 
             // Sequencer controls
